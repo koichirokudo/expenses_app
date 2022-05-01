@@ -1,7 +1,7 @@
 import React from 'react';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 
-import {Test} from './pages/test';
+import PersonList, {Test} from './pages/test';
 import {Login} from './pages/login';
 import {Register} from './pages/register';
 import {Initial} from './pages/initial';
