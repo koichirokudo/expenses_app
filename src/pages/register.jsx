@@ -203,7 +203,10 @@ export function Register() {
                     <CloseIcon fontSize="inherit"/>
                   </IconButton>
                 }
-                sx={{mb: 2}}
+                sx={{
+                  mb: 2,
+                  fontSize: "small"
+                }}
               >
                 {errorMessage}
               </Alert>
