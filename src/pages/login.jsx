@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -8,47 +8,27 @@ import Container from '@mui/material/Container';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
-import {Link as RouterLink} from 'react-router-dom';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import {green, red} from '@mui/material/colors';
+import {green} from '@mui/material/colors';
 import axios from '../api/axios';
-import {Alert, CircularProgress, Collapse, IconButton, InputAdornment} from '@mui/material';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import {Alert, CircularProgress, Collapse, IconButton} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import {Visibility, VisibilityOff} from '@mui/icons-material';
 
-const EMAIL_REGEX = /^[a-zA-Z\d.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z\d-]+(?:\.[a-zA-Z\d-]+)*$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!-/:-@\[-`{-~]).{10,24}$/;
 const REGISTER_URL = '/login';
 
 export function Login() {
+  let navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
   const [email, setEmail] = useState('');
-  const [validEmail, setValidEmail] = useState(false);
-  const [emailFocus, setEmailFocus] = useState(false);
-
   const [pwd, setPwd] = useState('');
-  const [validPwd, setValidPwd] = useState(false);
-  const [pwdFocus, setPwdFocus] = useState(false);
-  const [showPwd, setShowPwd] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState('');
   const [errorList, setErrorList] = useState([]);
-  const [success, setSuccess] = useState(false);
-
-  useEffect(() => {
-    const result = EMAIL_REGEX.test(email);
-    setValidEmail(result);
-  }, [email]);
-
-  useEffect(() => {
-    const result = PWD_REGEX.test(pwd);
-    setValidPwd(result);
-  }, [pwd]);
-
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleLogin = async (event) => {
     setOpen(false);
@@ -65,11 +45,12 @@ export function Login() {
           },
           withCredentials: true,
         },
-      ).then((response) => {
-        console.log(response);
-        setOpen(false);
-        setSuccess(true);
-      });
+      );
+      await axios.get('/me', {withCredentials: true})
+        .then(response => {
+          return response.data?.initial ? navigate('/', {replace: true})
+            : navigate('/initial', {replace: true});
+        });
     } catch (err) {
       if (!err?.response) {
         setErrorMessage('サーバーの応答がありません');
@@ -78,47 +59,12 @@ export function Login() {
         setErrorList(err.response.data.errors);
         setOpen(true);
       } else {
-        setErrorMessage('ログインに失敗しました');
+        setErrorMessage('メールアドレスまたはパスワードが違います。');
         setOpen(true);
       }
     }
     setLoading(false);
   };
-
-  const handleClickShowPwd = () => {
-    setShowPwd(!(showPwd));
-  };
-
-  const handleMouseDownPwd = (event) => {
-    event.preventDefault();
-  };
-
-  const iconEmailAdornment = email ? {
-    endAdornment:
-      <InputAdornment position="end">
-        {validEmail ? <CheckCircleOutlineIcon sx={{color: green[500]}}/> :
-          <CloseIcon sx={{color: red[500]}}/>}
-      </InputAdornment>,
-  } : {};
-
-  const iconPwdAdornment = pwd ? {
-    endAdornment:
-      <InputAdornment position="end">
-        <IconButton
-          aria-label="toggle password visibility"
-          onClick={handleClickShowPwd}
-          onMouseDown={handleMouseDownPwd}
-          edge="end"
-          sx={{
-            marginRight: '1px',
-          }}
-        >
-          {showPwd ? <VisibilityOff/> : <Visibility/>}
-        </IconButton>
-        {validPwd ? <CheckCircleOutlineIcon sx={{color: green[500]}}/> :
-          <CloseIcon sx={{color: red[500]}}/>}
-      </InputAdornment>,
-  } : {};
 
   return (
     <Container component="main" maxWidth="xs">
@@ -150,7 +96,10 @@ export function Login() {
                 <CloseIcon fontSize="inherit"/>
               </IconButton>
             }
-            sx={{mb: 2}}
+            sx={{
+              mb: 2,
+              fontSize: "small"
+            }}
           >
             {errorMessage}
           </Alert>
@@ -169,31 +118,25 @@ export function Login() {
         <form onSubmit={handleLogin}>
           <TextField
             required
-            error={!!errorList?.email || emailFocus && !validEmail}
+            error={!!errorList?.email}
             fullWidth
             margin="normal"
             label="メールアドレス"
             defaultValue={email}
             helperText={errorList?.email}
             onChange={event => setEmail(event.target.value)}
-            onFocus={() => setEmailFocus(true)}
-            onBlur={() => setEmailFocus(false)}
-            InputProps={iconEmailAdornment}
           />
           <TextField
             autoComplete="off"
             required
-            error={!!errorList?.password || pwdFocus && !validPwd}
+            error={!!errorList?.password}
             fullWidth
-            type={showPwd ? 'text' : 'password'}
+            type="password"
             margin="normal"
             label="パスワード"
             defaultValue={pwd}
             helperText={errorList?.password}
             onChange={event => setPwd(event.target.value)}
-            onFocus={() => setPwdFocus(true)}
-            onBlur={() => setPwdFocus(false)}
-            InputProps={iconPwdAdornment}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary"/>}
@@ -227,4 +170,4 @@ export function Login() {
       </Box>
     </Container>
   );
-};
+}
