@@ -16,9 +16,9 @@ import {Alert, Collapse, IconButton} from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
 
-const EMAIL_REGEX = /^[a-zA-Z\d.!#$%&'*+\/=?^_`{|}~-]+@(?:[a-zA-Z\d-]+)(?:\.[a-zA-Z\d-]+)*$/;
+const EMAIL_REGEX = /^[a-zA-Z\d.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z\d-]+(?:\.[a-zA-Z\d-]+)*$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!-/:-@\[-`{-~]).{10,24}$/;
-const REGISTER_URL = '/users';
+const REGISTER_URL = '/register';
 
 export function Register() {
   const [loading, setLoading] = useState(false);
@@ -47,15 +47,11 @@ export function Register() {
 
   useEffect(() => {
     const result = EMAIL_REGEX.test(email);
-    console.log(result);
-    console.log(email);
     setValidEmail(result);
   }, [email]);
 
   useEffect(() => {
     const result = PWD_REGEX.test(pwd);
-    console.log(result);
-    console.log(pwd);
     setValidPwd(result);
     const match = pwd === matchPwd;
     setValidMatch(match);
@@ -69,7 +65,7 @@ export function Register() {
     setLoading(true);
     event.preventDefault();
     try {
-      const response = await axios.post(REGISTER_URL,
+      await axios.post(REGISTER_URL,
         JSON.stringify({email, password: pwd}),
         {
           headers: {
@@ -79,8 +75,6 @@ export function Register() {
           // withCredentials: true,
         },
       );
-      console.log(response.data);
-      console.log(JSON.stringify(response));
       setOpen(false);
       setSuccess(true);
     } catch (err) {
@@ -176,7 +170,7 @@ export function Register() {
             <Typography component="h1" variant="h6">
               登録が完了しました。
             </Typography>
-            <Link component={RouterLink} to="/" variant="p">ログイン画面</Link>
+            <Link component={RouterLink} to="/login" variant="p">ログイン画面</Link>
           </Box>
         </Container>
       ) : (
@@ -281,7 +275,7 @@ export function Register() {
               </Button>
               <Link
                 component={RouterLink}
-                to="/"
+                to="/login"
                 variant="body2"
               >
                 ログイン画面
