@@ -61,7 +61,7 @@ export function Register() {
     setErrorMessage('');
   }, [email, pwd, matchPwd]);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     setLoading(true);
     event.preventDefault();
     try {
@@ -80,12 +80,12 @@ export function Register() {
     } catch (err) {
       console.error(err.response.data);
       if (!err?.response) {
-        setErrorMessage('サーバーの応答がありません');
+        setErrorMessage('サーバーの応答がありません。');
         setOpen(true);
       } else if (err.response?.status === 422) {
         setErrorList(err.response.data.errors);
       } else {
-        setErrorMessage('登録に失敗しました');
+        setErrorMessage('登録に失敗しました。');
         setOpen(true);
       }
     }
