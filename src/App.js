@@ -1,26 +1,30 @@
-import React from 'react';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import PersonList, {Test} from './pages/test';
-import {Login} from './pages/login';
-import {Register} from './pages/register';
-import {Initial} from './pages/initial';
-import {InputPage} from './pages/input';
-import {MonthReportPage} from './pages/monthReport';
-import {CategoryReportPage} from './pages/categoryReport';
+import { LoginPage } from "./pages/LoginPage";
+import { Test } from "./pages/test";
+import { RegisterPage } from "./pages/RegisterPage";
+import { InputPage } from "./pages/input";
+import { MonthReportPage } from "./pages/monthReport";
+import { CategoryReportPage } from "./pages/categoryReport";
+import { NotFound } from "./pages/NotFound";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Test />} />
-        <Route path="/login" element={<Login />}/>
-        <Route path="/register" element={<Register/>}/>
-        <Route path="/initial" element={<Initial/>}/>
-        <Route path="/input" element={<InputPage/>}/>
-        <Route path="/month_report" element={<MonthReportPage/>} />
-        <Route path="/category_report" element={<CategoryReportPage/>} component={CategoryReportPage}
-               render={()=> <CategoryReportPage category={'kudo'}/> }/>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/input" element={<InputPage />} />
+        <Route path="/month_report" element={<MonthReportPage />} />
+        <Route
+          path="/category_report"
+          element={<CategoryReportPage />}
+          component={CategoryReportPage}
+          render={() => <CategoryReportPage category={"kudo"} />}
+        />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
