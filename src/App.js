@@ -4,10 +4,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LoginPage } from "./pages/LoginPage";
 import { Test } from "./pages/test";
 import { RegisterPage } from "./pages/RegisterPage";
-import { InputPage } from "./pages/input";
-import { MonthReportPage } from "./pages/monthReport";
-import { CategoryReportPage } from "./pages/categoryReport";
-import { NotFound } from "./pages/NotFound";
+import { InputPage } from "./pages/InputPage";
+import { MonthReportPage } from "./pages/MonthReportPage";
+import { CategoryReportPage } from "./pages/CategoryReportPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
           component={CategoryReportPage}
           render={() => <CategoryReportPage category={"kudo"} />}
         />
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

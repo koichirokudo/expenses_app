@@ -1,5 +1,5 @@
-import React from 'react';
-import {Bar} from 'react-chartjs-2';
+import React from "react";
+import { Bar } from "react-chartjs-2";
 
 import {
   CategoryScale,
@@ -10,15 +10,16 @@ import {
   Title as ChartTitle,
   Tooltip,
   Legend,
-  BarController, BarElement,
-} from 'chart.js';
-import GenericTemplate from '../components/genericTemplate';
-import Grid from '@mui/material/Grid';
-import {Paper} from '@mui/material';
-import {Title} from './title';
-import Typography from '@mui/material/Typography';
+  BarController,
+  BarElement,
+} from "chart.js";
+import GenericTemplate from "../components/genericTemplate";
+import Grid from "@mui/material/Grid";
+import { Paper } from "@mui/material";
+import { Title } from "./Title";
 
-ChartJS.register(CategoryScale,
+ChartJS.register(
+  CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -26,7 +27,7 @@ ChartJS.register(CategoryScale,
   Tooltip,
   Legend,
   BarController,
-  BarElement,
+  BarElement
 );
 
 export const CategoryReportPage = (props) => {
@@ -43,16 +44,25 @@ export const CategoryReportPage = (props) => {
     },
   };
   const graphData1 = {
-    labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+    labels: [
+      "1月",
+      "2月",
+      "3月",
+      "4月",
+      "5月",
+      "6月",
+      "7月",
+      "8月",
+      "9月",
+      "10月",
+      "11月",
+      "12月",
+    ],
     datasets: [
       {
         data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-        backgroundColor: [
-          '#666',
-        ],
-        borderColor: [
-          '#666',
-        ],
+        backgroundColor: ["#666"],
+        borderColor: ["#666"],
       },
     ],
   };
@@ -67,9 +77,9 @@ export const CategoryReportPage = (props) => {
         spacing={1}
       >
         <Grid item xs={12} md={12} lg={12}>
-          <Paper sx={{p: 2}}>
+          <Paper sx={{ p: 2 }}>
             <Title>住居費のレポート</Title>
-            <Bar options={barOptions} data={graphData1}/>
+            <Bar options={barOptions} data={graphData1} />
           </Paper>
         </Grid>
       </Grid>
