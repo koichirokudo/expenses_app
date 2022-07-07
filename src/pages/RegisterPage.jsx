@@ -88,8 +88,7 @@ export function RegisterPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          // TODO: CORS
-          // withCredentials: true,
+          withCredentials: true,
         }
       );
       setOpen(false);
