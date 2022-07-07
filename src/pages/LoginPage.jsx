@@ -30,7 +30,7 @@ export function LoginPage() {
   const [errorList, setErrorList] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogin = async (event) => {
+  const handleLogin = async event => {
     setOpen(false);
     setLoading(true);
     event.preventDefault();
@@ -43,12 +43,7 @@ export function LoginPage() {
         },
         withCredentials: true,
       });
-      await axios.get("/me", { withCredentials: true }).then((response) => {
-        console.log(response.data);
-        return response.data?.initial
-          ? navigate("/", { replace: true })
-          : navigate("/register", { replace: true });
-      });
+      return navigate("/", { replace: true });
     } catch (err) {
       if (!err?.response) {
         setErrorMessage("サーバーの応答がありません");
