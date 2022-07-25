@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Avatar from "@mui/material/Avatar";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import Box from "@mui/material/Box";
@@ -34,15 +34,15 @@ export function RegisterPage() {
   const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
 
-  const [pwd, setPwd] = useState("");
-  const [validPwd, setValidPwd] = useState(false);
-  const [pwdFocus, setPwdFocus] = useState(false);
-  const [showPwd, setShowPwd] = useState(false);
+  const [password, setPassword] = useState("");
+  const [validPassword, setValidPassword] = useState(false);
+  const [passwordFocus, setPasswordFocus] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const [matchPwd, setMatchPwd] = useState("");
+  const [matchPassword, setMatchPassword] = useState("");
   const [validMatch, setValidMatch] = useState(false);
   const [matchFocus, setMatchFocus] = useState(false);
-  const [showMatchPwd, setShowMatchPwd] = useState(false);
+  const [showMatchPassword, setShowMatchPassword] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [errorList, setErrorList] = useState([]);
@@ -67,15 +67,15 @@ export function RegisterPage() {
   }, [email]);
 
   useEffect(() => {
-    const result = PWD_REGEX.test(pwd);
-    setValidPwd(result);
-    const match = pwd === matchPwd;
+    const result = PWD_REGEX.test(password);
+    setValidPassword(result);
+    const match = password === matchPassword;
     setValidMatch(match);
-  }, [pwd, matchPwd]);
+  }, [password, matchPassword]);
 
   useEffect(() => {
     setErrorMessage("");
-  }, [email, pwd, matchPwd]);
+  }, [email, password, matchPassword]);
 
   const handleSubmit = async (event) => {
     setLoading(true);
@@ -83,7 +83,7 @@ export function RegisterPage() {
     try {
       await axios.post(
         REGISTER_URL,
-        JSON.stringify({ name, email, password: pwd }),
+        JSON.stringify({ name, email, password}),
         {
           headers: {
             "Content-Type": "application/json",
@@ -93,13 +93,13 @@ export function RegisterPage() {
       );
       setOpen(false);
       setSuccess(true);
-    } catch (err) {
-      console.error(err.response.data);
-      if (!err?.response) {
+    } catch (error) {
+      console.error(error);
+      if (!error?.response) {
         setErrorMessage("サーバーの応答がありません。");
         setOpen(true);
-      } else if (err.response?.status === 422) {
-        setErrorList(err.response.data.errors);
+      } else if (error.response?.status === 422) {
+        setErrorList(error.response.data.errors);
       } else {
         setErrorMessage("登録に失敗しました。");
         setOpen(true);
@@ -108,94 +108,94 @@ export function RegisterPage() {
     setLoading(false);
   };
 
-  const handleClickShowPwd = () => {
-    setShowPwd(!showPwd);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
-  const handleClickShowMatchPwd = () => {
-    setShowMatchPwd(!showMatchPwd);
+  const handleClickShowMatchPassword = () => {
+    setShowMatchPassword(!showMatchPassword);
   };
 
-  const handleMouseDownPwd = (event) => {
+  const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
   const iconNameAdornment = name
     ? {
-        endAdornment: (
-          <InputAdornment position="end">
-            {validName ? (
-              <CheckCircleOutlineIcon sx={{ color: green[500] }} />
-            ) : (
-              <CloseIcon sx={{ color: red[500] }} />
-            )}
-          </InputAdornment>
-        ),
-      }
+      endAdornment: (
+        <InputAdornment position="end">
+          {validName ? (
+            <CheckCircleOutlineIcon sx={{color: green[500]}}/>
+          ) : (
+            <CloseIcon sx={{color: red[500]}}/>
+          )}
+        </InputAdornment>
+      ),
+    }
     : {};
 
   const iconEmailAdornment = email
     ? {
-        endAdornment: (
-          <InputAdornment position="end">
-            {validEmail ? (
-              <CheckCircleOutlineIcon sx={{ color: green[500] }} />
-            ) : (
-              <CloseIcon sx={{ color: red[500] }} />
-            )}
-          </InputAdornment>
-        ),
-      }
+      endAdornment: (
+        <InputAdornment position="end">
+          {validEmail ? (
+            <CheckCircleOutlineIcon sx={{color: green[500]}}/>
+          ) : (
+            <CloseIcon sx={{color: red[500]}}/>
+          )}
+        </InputAdornment>
+      ),
+    }
     : {};
 
-  const iconPwdAdornment = pwd
+  const iconPasswordAdornment = password
     ? {
-        endAdornment: (
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="toggle password visibility"
-              onClick={handleClickShowPwd}
-              onMouseDown={handleMouseDownPwd}
-              edge="end"
-              sx={{
-                marginRight: "1px",
-              }}
-            >
-              {showPwd ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-            {validPwd ? (
-              <CheckCircleOutlineIcon sx={{ color: green[500] }} />
-            ) : (
-              <CloseIcon sx={{ color: red[500] }} />
-            )}
-          </InputAdornment>
-        ),
-      }
+      endAdornment: (
+        <InputAdornment position="end">
+          <IconButton
+            aria-label="toggle password visibility"
+            onClick={handleClickShowPassword}
+            onMouseDown={handleMouseDownPassword}
+            edge="end"
+            sx={{
+              marginRight: "1px",
+            }}
+          >
+            {showPassword ? <VisibilityOff/> : <Visibility/>}
+          </IconButton>
+          {validPassword ? (
+            <CheckCircleOutlineIcon sx={{color: green[500]}}/>
+          ) : (
+            <CloseIcon sx={{color: red[500]}}/>
+          )}
+        </InputAdornment>
+      ),
+    }
     : {};
 
-  const iconMatchPwdAdornment = matchPwd
+  const iconMatchPasswordAdornment = matchPassword
     ? {
-        endAdornment: (
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="toggle confirm password visibility"
-              onClick={handleClickShowMatchPwd}
-              onMouseDown={handleMouseDownPwd}
-              edge="end"
-              sx={{
-                marginRight: "1px",
-              }}
-            >
-              {showMatchPwd ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-            {validMatch ? (
-              <CheckCircleOutlineIcon sx={{ color: green[500] }} />
-            ) : (
-              <CloseIcon sx={{ color: red[500] }} />
-            )}
-          </InputAdornment>
-        ),
-      }
+      endAdornment: (
+        <InputAdornment position="end">
+          <IconButton
+            aria-label="toggle confirm password visibility"
+            onClick={handleClickShowMatchPassword}
+            onMouseDown={handleMouseDownPassword}
+            edge="end"
+            sx={{
+              marginRight: "1px",
+            }}
+          >
+            {showMatchPassword ? <VisibilityOff/> : <Visibility/>}
+          </IconButton>
+          {validMatch ? (
+            <CheckCircleOutlineIcon sx={{color: green[500]}}/>
+          ) : (
+            <CloseIcon sx={{color: red[500]}}/>
+          )}
+        </InputAdornment>
+      ),
+    }
     : {};
 
   return (
@@ -213,7 +213,7 @@ export function RegisterPage() {
           >
             <CheckCircleOutlineIcon
               fontSize="large"
-              sx={{ color: green[500] }}
+              sx={{color: green[500]}}
             />
             <Typography component="h1" variant="h6">
               登録が完了しました。
@@ -305,31 +305,31 @@ export function RegisterPage() {
               <TextField
                 autoComplete="off"
                 required
-                error={!!errorList?.password || (pwdFocus && !validPwd)}
-                type={showPwd ? "text" : "password"}
+                error={!!errorList?.password || (passwordFocus && !validPassword)}
+                type={showPassword ? "text" : "password"}
                 fullWidth
                 margin="normal"
                 label="パスワード"
-                defaultValue={pwd}
+                defaultValue={password}
                 helperText={errorList?.password || msg}
-                onChange={(event) => setPwd(event.target.value)}
-                onFocus={() => setPwdFocus(true)}
-                onBlur={() => setPwdFocus(false)}
-                InputProps={iconPwdAdornment}
+                onChange={(event) => setPassword(event.target.value)}
+                onFocus={() => setPasswordFocus(true)}
+                onBlur={() => setPasswordFocus(false)}
+                InputProps={iconPasswordAdornment}
               />
               <TextField
                 autoComplete="off"
                 required
                 error={matchFocus && !validMatch}
-                type={showMatchPwd ? "text" : "password"}
+                type={showMatchPassword ? "text" : "password"}
                 fullWidth
                 margin="normal"
                 label="確認用パスワード"
-                defaultValue={matchPwd}
-                onChange={(event) => setMatchPwd(event.target.value)}
+                defaultValue={matchPassword}
+                onChange={(event) => setMatchPassword(event.target.value)}
                 onFocus={() => setMatchFocus(true)}
                 onBlur={() => setMatchFocus(false)}
-                InputProps={iconMatchPwdAdornment}
+                InputProps={iconMatchPasswordAdornment}
               />
 
               <Button
@@ -337,8 +337,8 @@ export function RegisterPage() {
                 fullWidth
                 variant="contained"
                 color="primary"
-                sx={{ mt: "10px", mb: "10px" }}
-                disabled={!validEmail || !validPwd || !validMatch}
+                sx={{mt: "10px", mb: "10px"}}
+                disabled={!validEmail || !validPassword || !validMatch}
               >
                 新規登録
               </Button>
