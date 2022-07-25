@@ -15,6 +15,7 @@ import { green } from "@mui/material/colors";
 import axios from "../api/axios";
 import { Alert, CircularProgress, Collapse, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useAuthUserContext } from "../providers/AuthUser";
 
 const REGISTER_URL = "/login";
 
@@ -30,10 +31,13 @@ export function LoginPage() {
   const [errorList, setErrorList] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogin = async event => {
+  const authUser = useAuthUserContext();
+
+  const handleLogin = async (event) => {
     setOpen(false);
     setLoading(true);
     event.preventDefault();
+    let cleanedUp = false;
     try {
       await axios.get("/sanctum/csrf-cookie", { withCredentials: true });
       await axios.post(REGISTER_URL, JSON.stringify({ email, password: pwd }), {
@@ -43,7 +47,11 @@ export function LoginPage() {
         },
         withCredentials: true,
       });
-      return navigate("/", { replace: true });
+      const response = await axios.get("/me", { withCredentials: true });
+      cleanedUp = true;
+      authUser.login(response?.data, () => {
+        navigate("/", { replace: true });
+      });
     } catch (err) {
       if (!err?.response) {
         setErrorMessage("サーバーの応答がありません");
@@ -56,7 +64,9 @@ export function LoginPage() {
         setOpen(true);
       }
     }
-    setLoading(false);
+    if (!cleanedUp) {
+      setLoading(false);
+    }
   };
 
   return (

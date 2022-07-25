@@ -1,9 +1,12 @@
 import React from "react";
-import {RouterConfig} from './config/RouterConfig';
+import { RouterConfig } from "./config/RouterConfig";
+import { Providers } from "./components/providers";
 
 function App() {
   return (
-    <RouterConfig/>
+    <Providers>
+      <RouterConfig />
+    </Providers>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import GenericTemplate from "../components/genericTemplate";
 import {
   CssBaseline,
@@ -14,20 +14,14 @@ import {
 import CreateIcon from "@mui/icons-material/Create";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import {inputListItem} from "./InputListItem";
+import { inputListItem } from "./InputListItem";
 import FormControl from "@mui/material/FormControl";
 import Totals from "./Totals";
-import {Title} from "./Title";
+import { Title } from "./Title";
 import Box from "@mui/material/Box";
-import axios from "../api/axios";
 
-export const InputPage = async () => {
+export const InputPage = () => {
   // 認証済みか
-  await axios.get("/me", { withCredentials: true})
-    .then((res) => {
-      console.log(res.data);
-    });
-
   const currentDate = new Date();
   const formatDate = (date) => {
     return (
@@ -46,20 +40,16 @@ export const InputPage = async () => {
   });
 
   const handleChange = (prop) => (event) => {
-    setValues({...values, [prop]: event.target.value});
+    setValues({ ...values, [prop]: event.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post(`http://localhost/api/create`, values).then((res) => {
-      console.log(res);
-      console.log(res.data);
-    });
   };
 
   return (
     <GenericTemplate title="収支の入力">
-      <CssBaseline/>
+      <CssBaseline />
       <Grid
         container
         direction="row"
@@ -68,10 +58,10 @@ export const InputPage = async () => {
         spacing={3}
       >
         <Grid item sm={12} md={12} lg={7}>
-          <Paper sx={{p: 2}}>
+          <Paper sx={{ p: 2 }}>
             <Title>収支の入力・編集</Title>
             <form onSubmit={handleSubmit}>
-              <Box sx={{mt: 1}}>
+              <Box sx={{ mt: 1 }}>
                 <ToggleButtonGroup
                   color="primary"
                   value={values.types}
@@ -94,7 +84,7 @@ export const InputPage = async () => {
                     shrink: true,
                   }}
                   InputProps={{
-                    style: {fontSize: 18},
+                    style: { fontSize: 18 },
                   }}
                   sx={{
                     mt: 2,
@@ -103,7 +93,7 @@ export const InputPage = async () => {
                     fontSize: "32px",
                   }}
                 />
-                <FormControl margin="dense" sx={{mt: 2, width: "25ch"}}>
+                <FormControl margin="dense" sx={{ mt: 2, width: "25ch" }}>
                   <InputLabel id="payer-label">支払った人</InputLabel>
                   <Select
                     labelId="payer-label"
@@ -118,7 +108,7 @@ export const InputPage = async () => {
                 </FormControl>
               </Box>
               <Box>
-                <FormControl margin="dense" sx={{width: "25ch", mr: 2}}>
+                <FormControl margin="dense" sx={{ width: "25ch", mr: 2 }}>
                   <InputLabel id="category-label">カテゴリ</InputLabel>
                   <Select
                     labelId="category-label"
@@ -184,15 +174,15 @@ export const InputPage = async () => {
                 label="メモ"
                 defaultValue={values.memo}
                 onChange={handleChange("memo")}
-                sx={{width: 320}}
+                sx={{ width: 320 }}
               />
               <Button
                 size="large"
                 type="submit"
                 variant="contained"
                 color="primary"
-                endIcon={<CreateIcon/>}
-                sx={{mt: 2, mb: 1, ml: 2, width: 120}}
+                endIcon={<CreateIcon />}
+                sx={{ mt: 2, mb: 1, ml: 2, width: 120 }}
               >
                 登録
               </Button>
@@ -200,8 +190,8 @@ export const InputPage = async () => {
           </Paper>
         </Grid>
         <Grid item xs={12} md={12} lg={5}>
-          <Paper sx={{p: 2}}>
-            <Totals/>
+          <Paper sx={{ p: 2 }}>
+            <Totals />
           </Paper>
         </Grid>
         <Grid item xs={12}>

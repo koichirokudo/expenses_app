@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import Box from "@mui/material/Box";
@@ -52,7 +52,6 @@ export function RegisterPage() {
     "10桁以上、英大文字、英小文字、数字、記号を" +
     "それぞれ最低1文字ずつ含む必要があります。";
 
-  // TODO: api 側で name が登録できるようにする
   useEffect(() => {
     if (name.length >= 3 && name.length <= 10) {
       setValidName(true);
@@ -81,9 +80,10 @@ export function RegisterPage() {
     setLoading(true);
     event.preventDefault();
     try {
+      await axios.get("/sanctum/csrf-cookie", { withCredentials: true });
       await axios.post(
         REGISTER_URL,
-        JSON.stringify({ name, email, password}),
+        JSON.stringify({ name, email, password }),
         {
           headers: {
             "Content-Type": "application/json",
@@ -122,80 +122,80 @@ export function RegisterPage() {
 
   const iconNameAdornment = name
     ? {
-      endAdornment: (
-        <InputAdornment position="end">
-          {validName ? (
-            <CheckCircleOutlineIcon sx={{color: green[500]}}/>
-          ) : (
-            <CloseIcon sx={{color: red[500]}}/>
-          )}
-        </InputAdornment>
-      ),
-    }
+        endAdornment: (
+          <InputAdornment position="end">
+            {validName ? (
+              <CheckCircleOutlineIcon sx={{ color: green[500] }} />
+            ) : (
+              <CloseIcon sx={{ color: red[500] }} />
+            )}
+          </InputAdornment>
+        ),
+      }
     : {};
 
   const iconEmailAdornment = email
     ? {
-      endAdornment: (
-        <InputAdornment position="end">
-          {validEmail ? (
-            <CheckCircleOutlineIcon sx={{color: green[500]}}/>
-          ) : (
-            <CloseIcon sx={{color: red[500]}}/>
-          )}
-        </InputAdornment>
-      ),
-    }
+        endAdornment: (
+          <InputAdornment position="end">
+            {validEmail ? (
+              <CheckCircleOutlineIcon sx={{ color: green[500] }} />
+            ) : (
+              <CloseIcon sx={{ color: red[500] }} />
+            )}
+          </InputAdornment>
+        ),
+      }
     : {};
 
   const iconPasswordAdornment = password
     ? {
-      endAdornment: (
-        <InputAdornment position="end">
-          <IconButton
-            aria-label="toggle password visibility"
-            onClick={handleClickShowPassword}
-            onMouseDown={handleMouseDownPassword}
-            edge="end"
-            sx={{
-              marginRight: "1px",
-            }}
-          >
-            {showPassword ? <VisibilityOff/> : <Visibility/>}
-          </IconButton>
-          {validPassword ? (
-            <CheckCircleOutlineIcon sx={{color: green[500]}}/>
-          ) : (
-            <CloseIcon sx={{color: red[500]}}/>
-          )}
-        </InputAdornment>
-      ),
-    }
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle password visibility"
+              onClick={handleClickShowPassword}
+              onMouseDown={handleMouseDownPassword}
+              edge="end"
+              sx={{
+                marginRight: "1px",
+              }}
+            >
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+            {validPassword ? (
+              <CheckCircleOutlineIcon sx={{ color: green[500] }} />
+            ) : (
+              <CloseIcon sx={{ color: red[500] }} />
+            )}
+          </InputAdornment>
+        ),
+      }
     : {};
 
   const iconMatchPasswordAdornment = matchPassword
     ? {
-      endAdornment: (
-        <InputAdornment position="end">
-          <IconButton
-            aria-label="toggle confirm password visibility"
-            onClick={handleClickShowMatchPassword}
-            onMouseDown={handleMouseDownPassword}
-            edge="end"
-            sx={{
-              marginRight: "1px",
-            }}
-          >
-            {showMatchPassword ? <VisibilityOff/> : <Visibility/>}
-          </IconButton>
-          {validMatch ? (
-            <CheckCircleOutlineIcon sx={{color: green[500]}}/>
-          ) : (
-            <CloseIcon sx={{color: red[500]}}/>
-          )}
-        </InputAdornment>
-      ),
-    }
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle confirm password visibility"
+              onClick={handleClickShowMatchPassword}
+              onMouseDown={handleMouseDownPassword}
+              edge="end"
+              sx={{
+                marginRight: "1px",
+              }}
+            >
+              {showMatchPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+            {validMatch ? (
+              <CheckCircleOutlineIcon sx={{ color: green[500] }} />
+            ) : (
+              <CloseIcon sx={{ color: red[500] }} />
+            )}
+          </InputAdornment>
+        ),
+      }
     : {};
 
   return (
@@ -213,7 +213,7 @@ export function RegisterPage() {
           >
             <CheckCircleOutlineIcon
               fontSize="large"
-              sx={{color: green[500]}}
+              sx={{ color: green[500] }}
             />
             <Typography component="h1" variant="h6">
               登録が完了しました。
@@ -305,7 +305,9 @@ export function RegisterPage() {
               <TextField
                 autoComplete="off"
                 required
-                error={!!errorList?.password || (passwordFocus && !validPassword)}
+                error={
+                  !!errorList?.password || (passwordFocus && !validPassword)
+                }
                 type={showPassword ? "text" : "password"}
                 fullWidth
                 margin="normal"
@@ -337,7 +339,7 @@ export function RegisterPage() {
                 fullWidth
                 variant="contained"
                 color="primary"
-                sx={{mt: "10px", mb: "10px"}}
+                sx={{ mt: "10px", mb: "10px" }}
                 disabled={!validEmail || !validPassword || !validMatch}
               >
                 新規登録
