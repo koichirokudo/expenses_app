@@ -15,7 +15,7 @@ import {
   BarElement,
   ArcElement,
 } from "chart.js";
-import GenericTemplate from "../components/GenericTemplate";
+import GenericTemplate from "../components/template/GenericTemplate";
 import Grid from "@mui/material/Grid";
 import { Paper } from "@mui/material";
 import { Title } from "./Title";

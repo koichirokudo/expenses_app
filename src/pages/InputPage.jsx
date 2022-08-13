@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import GenericTemplate from "../components/GenericTemplate";
+import GenericTemplate from "../components/template/GenericTemplate";
 import {
   CssBaseline,
   InputAdornment,
@@ -21,7 +21,6 @@ import { Title } from "./Title";
 import Box from "@mui/material/Box";
 
 export const InputPage = () => {
-  // 認証済みか
   const currentDate = new Date();
   const formatDate = (date) => {
     return (

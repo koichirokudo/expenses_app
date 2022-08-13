@@ -6,7 +6,7 @@ import { InputPage } from "../pages/InputPage";
 import { MonthReportPage } from "../pages/MonthReportPage";
 import { CategoryReportPage } from "../pages/CategoryReportPage";
 import { NotFoundPage } from "../pages/NotFoundPage";
-import { RouteAuthGuard } from "../components/RouteAuthGuard";
+import { RouteAuthGuard } from "../components/auth/RouteAuthGuard";
 
 export const RouterConfig = () => {
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuthUserContext } from "../providers";
+import { useAuthUserContext } from "../../providers";
 import { Navigate } from "react-router-dom";
 
 export const RouteAuthGuard = (props) => {
