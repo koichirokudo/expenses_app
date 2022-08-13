@@ -15,7 +15,7 @@ import { green } from "@mui/material/colors";
 import axios from "../api/axios";
 import { Alert, CircularProgress, Collapse, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useAuthUserContext } from "../providers/AuthUser";
+import { useAuthUserContext } from "../providers";
 
 const REGISTER_URL = "/login";
 
@@ -49,7 +49,7 @@ export function LoginPage() {
       });
       const response = await axios.get("/me", { withCredentials: true });
       cleanedUp = true;
-      authUser.login(response?.data, () => {
+      authUser.login(response?.data.user, () => {
         navigate("/", { replace: true });
       });
     } catch (err) {

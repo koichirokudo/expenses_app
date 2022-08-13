@@ -21,11 +21,24 @@ export const RouterConfig = () => {
           />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/month_report" element={<MonthReportPage />} />
+          <Route
+            path="/month_report"
+            element={
+              <RouteAuthGuard
+                component={<MonthReportPage />}
+                redirect="/login"
+              />
+            }
+          />
           <Route
             path="/category_report"
-            element={<CategoryReportPage />}
-            component={CategoryReportPage}
+            element={
+              <RouteAuthGuard
+                component={<CategoryReportPage />}
+                redirect="/login"
+              />
+            }
+            component={<CategoryReportPage />}
             render={() => <CategoryReportPage category={"kudo"} />}
           />
           <Route path="*" element={<NotFoundPage />} />

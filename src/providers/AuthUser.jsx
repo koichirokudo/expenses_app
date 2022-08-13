@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import axios from "../api/axios";
+import { CircularProgress } from "@mui/material";
 
 const AuthUserContext = createContext();
 
@@ -7,7 +9,25 @@ export const useAuthUserContext = () => {
 };
 
 export const AuthUserProvider = (props) => {
-  const [user, setUser] = useState(null);
+  console.log("AuthUserProvider");
+  const [user, setUser] = useState();
+  const [loading, setLoading] = useState(true);
+
+  // 認証済みかを確認する
+  useEffect(() => {
+    (async () => {
+      await setLoading(true);
+      const response = await axios
+        .get("/me", { withCredentials: true })
+        .catch((error) => {
+          console.error(error);
+        });
+      if (response) {
+        await setUser(response.data.user);
+      }
+      await setLoading(false);
+    })();
+  }, []);
 
   const login = (newUser, callback: () => void) => {
     setUser(newUser);
@@ -19,10 +39,18 @@ export const AuthUserProvider = (props) => {
     callback();
   };
 
-  const value = { user, login, logout };
+  // ロード画面を表示する
+  if (loading) {
+    return (
+      <>
+        <CircularProgress />
+      </>
+    );
+  }
+  const values = { user, login, logout };
   return (
-    <AuthUserContext.Provider value={value}>
-      {props.children}
+    <AuthUserContext.Provider value={values}>
+      {!loading && props.children}
     </AuthUserContext.Provider>
   );
 };
