@@ -13,7 +13,7 @@ import {
   BarController,
   BarElement,
 } from "chart.js";
-import GenericTemplate from "../components/genericTemplate";
+import GenericTemplate from "../components/GenericTemplate";
 import Grid from "@mui/material/Grid";
 import { Paper } from "@mui/material";
 import { Title } from "./Title";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import GenericTemplate from "../components/genericTemplate";
+import GenericTemplate from "../components/GenericTemplate";
 import {
   CssBaseline,
   InputAdornment,
