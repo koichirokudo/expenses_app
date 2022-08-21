@@ -47,17 +47,17 @@ export function LoginPage() {
         },
         withCredentials: true,
       });
-      const response = await axios.get("/me", { withCredentials: true });
+      const response = await axios.get("/user/me", { withCredentials: true });
       cleanedUp = true;
       authUser.login(response?.data.user, () => {
         navigate("/", { replace: true });
       });
-    } catch (err) {
-      if (!err?.response) {
+    } catch (error) {
+      if (!error?.response) {
         setErrorMessage("サーバーの応答がありません");
         setOpen(true);
-      } else if (err.response?.status === 422) {
-        setErrorList(err.response.data.errors);
+      } else if (error.response?.status === 422) {
+        setErrorList(error.response.data.errors);
         setOpen(true);
       } else {
         setErrorMessage("メールアドレスまたはパスワードが違います。");
