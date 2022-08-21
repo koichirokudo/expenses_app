@@ -18,7 +18,7 @@ export const AuthUserProvider = (props) => {
     (async () => {
       await setLoading(true);
       const response = await axios
-        .get("/me", { withCredentials: true })
+        .get("/user/me", { withCredentials: true })
         .catch((error) => {
           console.error(error);
         });
