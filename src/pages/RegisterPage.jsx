@@ -20,7 +20,7 @@ const EMAIL_REGEX =
   /^[a-zA-Z\d.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z\d-]+(?:\.[a-zA-Z\d-]+)*$/;
 const PWD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!-/:-@\[-`{-~]).{10,24}$/;
-const REGISTER_URL = "/register";
+const REGISTER_URL = "/user/register";
 
 export function RegisterPage() {
   const [loading, setLoading] = useState(false);
@@ -53,7 +53,7 @@ export function RegisterPage() {
     "それぞれ最低1文字ずつ含む必要があります。";
 
   useEffect(() => {
-    if (name.length >= 3 && name.length <= 10) {
+    if (name.length >= 2 && name.length <= 10) {
       setValidName(true);
     } else {
       setValidName(false);
@@ -80,7 +80,6 @@ export function RegisterPage() {
     setLoading(true);
     event.preventDefault();
     try {
-      await axios.get("/sanctum/csrf-cookie", { withCredentials: true });
       await axios.post(
         REGISTER_URL,
         JSON.stringify({ name, email, password }),
@@ -283,6 +282,7 @@ export function RegisterPage() {
                 margin="normal"
                 label="ニックネーム"
                 defaultValue={name}
+                helperText={errorList?.name}
                 onChange={(event) => setName(event.target.value)}
                 onFocus={() => setNameFocus(true)}
                 onBlur={() => setNameFocus(false)}
