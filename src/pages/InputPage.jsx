@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import GenericTemplate from "../components/template/GenericTemplate";
 import {
   CssBaseline,
+  FormHelperText,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -19,31 +20,70 @@ import FormControl from "@mui/material/FormControl";
 import Totals from "./Totals";
 import { Title } from "./Title";
 import Box from "@mui/material/Box";
+import { formatDate } from "../components/pages/FormatDate";
+import axios from "../api/axios";
+
+const REGISTER_URL = "/expenses/register";
+const PAYMENTS = 0;
+const INCOME = 1;
 
 export const InputPage = () => {
-  const currentDate = new Date();
-  const formatDate = (date) => {
-    return (
-      date.getFullYear() + "-" + date.getMonth() + 1 + "-" + date.getDate()
-    );
-  };
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [errorList, setErrorList] = useState([]);
 
+  const [dateFocus, setDateFocus] = useState(false);
+  const [validDate, setValidDate] = useState(false);
+
+  const [userIdFocus, setUserIdFocus] = useState(false);
+  const [validUserId, setValidUserId] = useState(false);
+
+  const [categoryFocus, setCategoryFocus] = useState(false);
+  const [validCategory, setValidCategory] = useState(false);
+
+  const [moneyFocus, setMoneyFocus] = useState(false);
+  const [validMoney, setValidMoney] = useState(false);
+
+  const currentDate = new Date();
   const [values, setValues] = useState({
+    types: 0,
     date: formatDate(currentDate),
-    types: "payments",
-    payer: "",
+    user_id: "",
     category: "",
-    spend: "",
-    income: "",
-    memo: "",
+    money: "",
+    note: "",
   });
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    setLoading(true);
+    event.preventDefault();
+    try {
+      await axios.post(REGISTER_URL, JSON.stringify({ ...values }), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      setOpen(false);
+    } catch (error) {
+      console.log(error.response);
+      if (!error?.response) {
+        setErrorMessage("サーバーの応答がありません。");
+        setOpen(true);
+      } else if (error.response?.status === 422) {
+        setErrorList(error.response.data.errors);
+        setOpen(true);
+      } else {
+        setErrorMessage("登録に失敗しました。");
+        setOpen(true);
+      }
+    }
+    setLoading(false);
   };
 
   return (
@@ -67,17 +107,19 @@ export const InputPage = () => {
                   exclusive
                   onChange={handleChange("types")}
                 >
-                  <ToggleButton value="payments">支出</ToggleButton>
-                  <ToggleButton value="income">収入</ToggleButton>
+                  <ToggleButton value={PAYMENTS}>支出</ToggleButton>
+                  <ToggleButton value={INCOME}>収入</ToggleButton>
                 </ToggleButtonGroup>
               </Box>
               <Box>
                 <TextField
                   id="date"
+                  error={!!errorList?.date || (dateFocus && !validDate)}
                   label="支払った日"
                   margin="dense"
                   type="date"
                   defaultValue={formatDate(currentDate)}
+                  helperText={errorList?.date}
                   onChange={handleChange("date")}
                   InputLabelProps={{
                     shrink: true,
@@ -93,17 +135,26 @@ export const InputPage = () => {
                   }}
                 />
                 <FormControl margin="dense" sx={{ mt: 2, width: "25ch" }}>
-                  <InputLabel id="payer-label">支払った人</InputLabel>
+                  <InputLabel id="userid-label">支払った人</InputLabel>
                   <Select
-                    labelId="payer-label"
-                    id="payer-select"
-                    value={values.payer}
+                    labelId="userid-label"
+                    id="userid-select"
+                    error={
+                      !!errorList?.user_id || (userIdFocus && !validUserId)
+                    }
+                    value={values.user_id}
                     label="支払った人"
-                    onChange={handleChange("payer")}
+                    onChange={handleChange("user_id")}
                   >
-                    <MenuItem value={"工藤"}>工藤</MenuItem>
-                    <MenuItem value={"佐藤"}>佐藤</MenuItem>
+                    {/*
+                      登録されている人の名前を持ってくる
+                    */}
+                    <MenuItem value={1}>工藤</MenuItem>
+                    <MenuItem value={2}>佐藤</MenuItem>
                   </Select>
+                  <FormHelperText error={true}>
+                    {errorList?.user_id}
+                  </FormHelperText>
                 </FormControl>
               </Box>
               <Box>
@@ -112,6 +163,9 @@ export const InputPage = () => {
                   <Select
                     labelId="category-label"
                     id="category-select"
+                    error={
+                      !!errorList?.category || (categoryFocus && !validCategory)
+                    }
                     value={values.category}
                     label="カテゴリ"
                     onChange={handleChange("category")}
@@ -135,12 +189,17 @@ export const InputPage = () => {
                     <MenuItem value="Gift">贈答費</MenuItem>
                     <MenuItem value="Fee">手数料</MenuItem>
                   </Select>
+                  <FormHelperText error={true}>
+                    {errorList?.category}
+                  </FormHelperText>
                 </FormControl>
                 <TextField
                   margin="dense"
                   label="支出"
-                  defaultValue={values.spend}
-                  onChange={handleChange("spend")}
+                  error={!!errorList?.money || (moneyFocus && !validMoney)}
+                  defaultValue={values.money}
+                  helperText={errorList?.money}
+                  onChange={handleChange("money")}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">￥</InputAdornment>
@@ -149,14 +208,16 @@ export const InputPage = () => {
                   sx={{
                     width: "25ch",
                     mr: 2,
-                    display: values.types === "payments" ? "" : "none",
+                    display: values.types === PAYMENTS ? "" : "none",
                   }}
                 />
                 <TextField
                   margin="dense"
                   label="収入"
-                  defaultValue={values.income}
-                  onChange={handleChange("income")}
+                  error={!!errorList?.money || (moneyFocus && !validMoney)}
+                  defaultValue={values.money}
+                  helperText={errorList?.money}
+                  onChange={handleChange("money")}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">￥</InputAdornment>
@@ -164,15 +225,15 @@ export const InputPage = () => {
                   }}
                   sx={{
                     width: "25ch",
-                    display: values.types === "income" ? "" : "none",
+                    display: values.types === INCOME ? "" : "none",
                   }}
                 />
               </Box>
               <TextField
                 margin="dense"
                 label="メモ"
-                defaultValue={values.memo}
-                onChange={handleChange("memo")}
+                defaultValue={values.note}
+                onChange={handleChange("note")}
                 sx={{ width: 320 }}
               />
               <Button
