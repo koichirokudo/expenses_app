@@ -13,7 +13,7 @@ import {
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
 import Box from "@mui/material/Box";
-import { mainListItems } from "../../pages/ListItems";
+import { mainListItems } from "./ListItems";
 import Container from "@mui/material/Container";
 
 const drawerWidth = 240;

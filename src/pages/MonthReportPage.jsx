@@ -19,7 +19,10 @@ import GenericTemplate from "../components/template/GenericTemplate";
 import Grid from "@mui/material/Grid";
 import { Paper } from "@mui/material";
 import { Title } from "./Title";
-import { incomeCategoryItems, spendCategoryItems } from "./CategoryItems";
+import {
+  incomeCategoryItems,
+  spendCategoryItems,
+} from "../components/pages/CategoryItems";
 
 ChartJS.register(
   CategoryScale,

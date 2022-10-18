@@ -1,8 +1,7 @@
 /**
- * 支出カテゴリ
+ * カテゴリ
  * @type {string[]}
  */
-
 export const spendCategoryItems = [
   "日用品",
   "教育費",
@@ -30,6 +29,34 @@ export const spendCategoryItems = [
  * @type {string[]}
  */
 export const incomeCategoryItems = [
+  "給料",
+  "副業",
+  "お小遣い",
+  "投資",
+  "賞与",
+  "臨時収入",
+];
+
+export const allCategoryItems = [
+  "日用品",
+  "教育費",
+  "交通費",
+  "保険料",
+  "美容",
+  "衣服",
+  "食費",
+  "医療費",
+  "住居費",
+  "水道",
+  "ガス",
+  "電気",
+  "ローン",
+  "インターネット",
+  "スマートフォン",
+  "娯楽費",
+  "交際費",
+  "贈答費",
+  "手数料",
   "給料",
   "副業",
   "お小遣い",
